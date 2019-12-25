@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/static/js/test.js"></script>
+</head>
+用户输入
+<hr>
+<form action="/index/"  method="post">
+  开始： <input type="text" name="start"/><br>
+  条数：<input type="text" name="limit"/><br>
+<input type="submit" value="提交"><br>
+</form>
+<hr>
+<h1>访问记录展示</h1>
+<table border="1">
+  <thead>
+  <th>id</th>
+  <th>softid</th>
+  <th>visittime</th>
+  <th>ip</th>
+  </thead>
+    <tbody>
+    {% for row in results %}
+         <tr>
+        <td>{{  row.0 }}</td>
+        <td>{{ row.1 }}</td>
+        <td>{{ row.2 }}</td>
+        <td>{{ row.3 }}</td>
+    <tr>
+{% endfor %}
+    </tr>
+     </tbody>
+</table>
+</body>
+</html>
