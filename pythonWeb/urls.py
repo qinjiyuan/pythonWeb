@@ -22,4 +22,5 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^index/', views.index),
+    url('valid/', views.validName),
 ]

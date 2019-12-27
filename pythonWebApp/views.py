@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -21,6 +22,10 @@ redis_sr = StrictRedis(host='localhost', port=6379, db=0)
 mongo_client = MongoClient('mongodb://admin:admin@localhost:27017')
 
 mongo_db = mongo_client.mongo_demo
+
+
+def validName(request):
+    return JsonResponse({"name": "qin_ji_yuan"})
 
 
 def index(request):
