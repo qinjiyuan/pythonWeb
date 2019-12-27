@@ -51,7 +51,8 @@ def mysql_connect(request):
     # print(results)
     # print(type(fields))
     # print(fields)
-    result2json(results, fields)
+    jsonData = result2json(results, fields)
+    writeData2Disk('myFirstJson.json', jsonData)
     return results
 
 
@@ -131,6 +132,7 @@ def redis_connect():
     print(result)
 
 
+# python将数据库查询的结果转换为json
 def result2json(results, fields):
     result_json = []
 
@@ -141,13 +143,36 @@ def result2json(results, fields):
     for row in results:
         result = {}
         for fieldIndex in range(0, len(field_list)):
-            result[field_list[fieldIndex]] = str(row[fieldIndex])
+            result[filed2filed(field_list[fieldIndex])] = str(row[fieldIndex])
         json_data = json.dumps(result, ensure_ascii=False)
         result_json.append(json_data)
-    print(result_json)
+
+    for obj in result_json:
+        print(json.loads(obj)['name'])
+        print(json.loads(obj)['loginName'])
+    return result_json
 
 
-# fixme
-# todo
+# 将数据库字段转换为驼峰命名法
 def filed2filed(filed):
-    filed.split('_')
+    files = ''
+    status = True
+    for fields in filed.split('_'):
+        if status:
+            files = files + fields
+            status = False
+        else:
+            files = files + fields.capitalize()
+    return files
+
+
+# 写入文件
+def writeData2Disk(filename, data):
+    with open(filename, 'w') as f:
+        json.dump(data, f)
+
+
+# 读取文件
+def readData4Disk(filename):
+    with open(filename, 'r') as r:
+        return json.load(r)
