@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
+import json
 from django.shortcuts import render
 import pymysql  # MySQL数据库查询组件
 
@@ -24,8 +25,8 @@ mongo_db = mongo_client.mongo_demo
 
 def index(request):
     results = mysql_connect(request)
-    mongodb_connect()
-    redis_connect()
+    # mongodb_connect()
+    # redis_connect()
     return render(request, "index.html", {"results": results})
 
 
@@ -42,8 +43,15 @@ def mysql_connect(request):
     try:
         cur.execute(sql)  # 执行sql语句
         results = cur.fetchall()  # 获取查询的所有记录
+        fields = cur.description
     except Exception as e:
         raise e
+    # print(type(results))
+    #
+    # print(results)
+    # print(type(fields))
+    # print(fields)
+    result2json(results, fields)
     return results
 
 
@@ -121,3 +129,25 @@ def redis_connect():
     result = redis_sr.keys()
     print("redis4")
     print(result)
+
+
+def result2json(results, fields):
+    result_json = []
+
+    field_list = []
+    for field in fields:
+        field_list.append(field[0])
+
+    for row in results:
+        result = {}
+        for fieldIndex in range(0, len(field_list)):
+            result[field_list[fieldIndex]] = str(row[fieldIndex])
+        json_data = json.dumps(result, ensure_ascii=False)
+        result_json.append(json_data)
+    print(result_json)
+
+
+# fixme
+# todo
+def filed2filed(filed):
+    filed.split('_')
